@@ -59,6 +59,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Route to serve home page (after login)
 app.get('/', (req, res) => {
   if (req.isAuthenticated()) {
+    console.log("IS AUTHENTICATED");
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
   } else {
     res.redirect('/login');
