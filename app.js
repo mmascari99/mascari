@@ -64,6 +64,7 @@ app.get('/', (req, res) => {
   } else {
     res.redirect('/login');
   }
+  console.log("Michael is doing his best");
 });
 
 // Sign-up Route
@@ -94,6 +95,11 @@ app.post('/login', passport.authenticate('local', {
   failureRedirect: '/login',
   failureFlash: true,
 }));
+
+// Resume Route
+app.get('/resume', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'resume.html'));
+});
 
 // Logout Route
 app.get('/logout', (req, res) => {
