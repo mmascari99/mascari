@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const session = require('express-session');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
-const port = 443;
+const port = 3000;
 
 // SQLite Database
 const db = new sqlite3.Database('./db/users.db'); // Path to your database file
