@@ -1,3 +1,4 @@
 *.json
 node_modules/
 users.db
+.secret.js

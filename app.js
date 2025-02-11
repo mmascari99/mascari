@@ -1,3 +1,5 @@
+import { secretHash } from '.secret.js'
+
 const express = require('express');
 const path = require('path');
 const passport = require('passport');
@@ -15,7 +17,7 @@ const db = new sqlite3.Database('./db/users.db'); // Path to your database file
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
-  secret: 'secret',  // Use a strong secret here
+  secret: secretHash,
   resave: false,
   saveUninitialized: true,
 }));
@@ -30,7 +32,7 @@ passport.use(new LocalStrategy(
     db.get('SELECT * FROM users WHERE username = ?', [username], (err, user) => {
       if (err) return done(err);
       if (!user) return done(null, false, { message: 'Incorrect username.' });
-      
+
       bcrypt.compare(password, user.password, (err, res) => {
         if (res) {
           return done(null, user);
