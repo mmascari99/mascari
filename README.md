@@ -1,1 +1,1 @@
-Just a website to place my resume. Been using mascari.me as an email server for a few years, figured I should give it a display page too.
+Trying to make a free fitness app. Not anywhere close to usable yet. Please visit mascari.me/resume to view my resume! 
