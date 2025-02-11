@@ -1,5 +1,4 @@
-import { secretHash } from '.secret.js'
-
+const secretHash = require('./.secret.js')
 const express = require('express');
 const path = require('path');
 const passport = require('passport');
