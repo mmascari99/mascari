@@ -26,6 +26,10 @@ app.use(session({
   saveUninitialized: true,
 }));
 
+//Enable ejs.
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
 // Initialize Passport.js
 app.use(passport.initialize());
 app.use(passport.session());
@@ -66,7 +70,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
   if (req.isAuthenticated()) {
     console.log("IS AUTHENTICATED");
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.render('index');
   } else {
     res.redirect('/login');
   }
@@ -75,7 +79,7 @@ app.get('/', (req, res) => {
 
 // Sign-up route.
 app.get('/signup', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'signup.html'));
+  res.render('signup');
 });
 
 // Sign-up logic.
@@ -83,7 +87,7 @@ app.use(authRoutes);
 
 // Login route.
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+  res.render('login');
 });
 
 // Login logic.
@@ -94,12 +98,12 @@ app.post('/login', passport.authenticate('local', {
 }));
 
 app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+  res.render('dashboard');
 });
 
 // Resume route.
 app.get('/resume', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'resume.html'));
+  res.render('resume');
 });
 
 // Logout route.
