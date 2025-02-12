@@ -1,4 +1,4 @@
-const secretHash = require('./.secret.js')
+// External requires.
 const express = require('express');
 const path = require('path');
 const passport = require('passport');
@@ -6,13 +6,18 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
 const sqlite3 = require('sqlite3').verbose();
+
+// Internal requires.
+const secretHash = require('./.secret.js')
+const authRoutes = require('./routes/auth.js');
+
 const app = express();
 const port = 3000;
 
-// SQLite Database
-const db = new sqlite3.Database('./db/users.db'); // Path to your database file
+// SQLite database.
+const db = new sqlite3.Database('./db/users.db');
 
-// Middleware
+// Middleware.
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
@@ -25,7 +30,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Passport local strategy for username and password login
+// Passport local strategy for username and password login.
 passport.use(new LocalStrategy(
   (username, password, done) => {
     db.get('SELECT * FROM users WHERE username = ?', [username], (err, user) => {
@@ -43,7 +48,7 @@ passport.use(new LocalStrategy(
   }
 ));
 
-// Store user info in session
+// Store user info in session.
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -54,10 +59,10 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-// Serve HTML
+// Serve HTML.
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Route to serve home page (after login)
+// Route to serve home page (after login).
 app.get('/', (req, res) => {
   if (req.isAuthenticated()) {
     console.log("IS AUTHENTICATED");
@@ -68,41 +73,32 @@ app.get('/', (req, res) => {
   console.log("Michael is doing his best");
 });
 
-// Sign-up Route
+// Sign-up route.
 app.get('/signup', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-// Sign-up Logic
-app.post('/signup', (req, res) => {
-  const { username, password } = req.body;
-  bcrypt.hash(password, 10, (err, hashedPassword) => {
-    if (err) return res.status(500).send('Error hashing password');
-    db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], (err) => {
-      if (err) return res.status(500).send('Error saving user');
-      res.redirect('/login');
-    });
-  });
-});
+// Sign-up logic.
+app.use(authRoutes);
 
-// Login Route
+// Login route.
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-// Login Logic
+// Login logic.
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true,
 }));
 
-// Resume Route
+// Resume route.
 app.get('/resume', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'resume.html'));
 });
 
-// Logout Route
+// Logout route.
 app.get('/logout', (req, res) => {
   req.logout((err) => {
     if (err) return next(err);
