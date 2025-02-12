@@ -88,10 +88,14 @@ app.get('/login', (req, res) => {
 
 // Login logic.
 app.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
+  successRedirect: '/dashboard',
   failureRedirect: '/login',
   failureFlash: true,
 }));
+
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
 
 // Resume route.
 app.get('/resume', (req, res) => {
