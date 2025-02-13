@@ -64,8 +64,10 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-// Serve HTML.
-app.use(express.static(path.join(__dirname, 'public')));
+app.use((req, res, next) => {
+  res.locals.user = req.user; // Makes req.user available in EJS globally
+  next();
+});
 
 // Route to serve home page (after login).
 app.get('/', (req, res) => {
@@ -99,7 +101,7 @@ app.post('/login', passport.authenticate('local', {
 }));
 
 app.get('/dashboard', (req, res) => {
-  res.render('dashboard', { user: 'michael' });
+  res.render('dashboard', { user: req.user });
 });
 
 // Resume route.
