@@ -59,6 +59,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
   db.get('SELECT * FROM users WHERE id = ?', [id], (err, user) => {
+    if (err) return done(err);
     done(err, user);
   });
 });
@@ -98,7 +99,7 @@ app.post('/login', passport.authenticate('local', {
 }));
 
 app.get('/dashboard', (req, res) => {
-  res.render('dashboard', { user: req.user });
+  res.render('dashboard', { user: 'michael' });
 });
 
 // Resume route.
