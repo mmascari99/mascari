@@ -8,8 +8,9 @@ const session = require('express-session');
 const sqlite3 = require('sqlite3').verbose();
 
 // Internal requires.
-const secretHash = require('./.secret.js')
+const { secretHash } = require('./.secret.js')
 const authRoutes = require('./routes/auth.js');
+const { writeStandard, writeWarning, writeError } = require('./scripts/logs.js');
 
 const app = express();
 const port = 3000;
@@ -93,8 +94,10 @@ app.post('/login', passport.authenticate('local', {
 
 app.get('/dashboard', (req, res) => {
   if (req.isAuthenticated()) {
+    writeStandard('User authenticated');
     res.render('dashboard', { username: "Authenticated" });
   } else {
+    writeWarning('User NOT authenticated');
     res.redirect('/login');
   }
 });
