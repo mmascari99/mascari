@@ -101,7 +101,12 @@ app.post('/login', passport.authenticate('local', {
 }));
 
 app.get('/dashboard', (req, res) => {
-  res.render('dashboard', { username: req.user });
+  if (req.isAuthenticated()) {
+    res.render('dashboard', { username: "Authenticated" });
+  } else {
+    res.render('login');
+  }
+
 });
 
 // Resume route.
