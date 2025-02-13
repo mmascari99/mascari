@@ -26,6 +26,8 @@ app.use(session({
   saveUninitialized: true,
 }));
 
+app.use(express.static('public'));
+
 //Enable ejs.
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -64,20 +66,9 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-app.use((req, res, next) => {
-  res.locals.user = req.user; // Makes req.user available in EJS globally
-  next();
-});
-
 // Route to serve home page (after login).
 app.get('/', (req, res) => {
-  if (req.isAuthenticated()) {
-    console.log("IS AUTHENTICATED");
     res.render('index');
-  } else {
-    res.redirect('/login');
-  }
-  console.log("Michael is doing his best");
 });
 
 // Sign-up route.
@@ -104,9 +95,8 @@ app.get('/dashboard', (req, res) => {
   if (req.isAuthenticated()) {
     res.render('dashboard', { username: "Authenticated" });
   } else {
-    res.render('login');
+    res.redirect('/login');
   }
-
 });
 
 // Resume route.
