@@ -1,47 +1,67 @@
 const express = require('express');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
-const sqlite3 = require('sqlite3').verbose();
+const { createUser, getUserByName } = require('../db/db');
 
 const router = express.Router();
-const db = new sqlite3.Database('./db/users.db');
 
-const { writeStandard, writeWarning, writeError } = require('../scripts/logs.js');
+// Passport local strategy
+passport.use(new LocalStrategy(async (username, password, done) => {
+  try {
+    const user = await getUserByName(username);
+    if (!user) return done(null, false, { message: 'User not found' });
 
-// Sign-up Route.
-router.post('/signup', (req, res) => {
-  const { username, password } = req.body;
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return done(null, false, { message: 'Incorrect password' });
 
-  if (!username || !password) {
-    writeError('username or password missing');
-    return res.status(400).json({ error: 'Username and password are required' });
+    return done(null, user);
+  } catch (err) {
+    return done(err);
   }
+}));
 
-  // Check if user already exists.
-  db.get('SELECT username FROM users WHERE username = ?', [username], (err, row) => {
-    if (err) {
-      writeError('Database Error');
-      return res.status(500).json({ error: 'Database error' });
-    } else if (row) {
-      writeWarning('Username Taken');
-      return res.status(400).json({ error: 'Username already taken' });
-    } 
+// Serialize user (store in session)
+passport.serializeUser((user, done) => {
+  done(null, user.username);
+});
 
-    // Hash password before saving.
-    bcrypt.hash(password, 10, (err, hashedPassword) => {
-      if (err) {
-        writeError('Password hash failed');
-        return res.status(500).json({ error: 'Error hashing password' });
-      }
+// Deserialize user (retrieve from session)
+passport.deserializeUser(async (username, done) => {
+  try {
+    const user = await getUserByName(username);
+    if (!user) return done(null, false);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
 
-      db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], (err) => {
-        if (err) {
-          writeError('Error saving user');
-          return res.status(500).json({ error: 'Error saving user' });
-        }
-        writeStandard('Saved user: ');
-        res.status(201).json({ success: true, message: 'User registered successfully' });
-      });
-    });
+// Signup Route
+router.post('/signup', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const existingUser = await getUserByName(username);
+    if (existingUser) return res.status(400).send('User already exists');
+
+    const newUser = await createUser(username, password);
+    res.redirect('/login');
+  } catch (err) {
+    res.status(500).send('Error creating user');
+  }
+});
+
+// Login Route
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/dashboard',
+  failureRedirect: '/login',
+  failureFlash: true
+}));
+
+// Logout Route
+router.get('/logout', (req, res) => {
+  req.logout(() => {
+    res.redirect('/');
   });
 });
 
