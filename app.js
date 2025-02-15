@@ -9,7 +9,7 @@ require('dotenv').config();
 
 const secretKey = process.env.SECRET_KEY;
 
-// Middleware
+// Middleware.
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -22,24 +22,26 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-// Set up EJS for rendering views
+// Set up EJS for rendering views.
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Routes
+// Routes.
 app.use(authRoutes);
 
-// Dashboard route (protected)
+// Dashboard route (protected).
 app.get('/dashboard', (req, res) => {
   if (!req.isAuthenticated()) return res.redirect('/login');
   res.render('dashboard', { name: req.user.username });
 });
 
-// Login & Signup pages
+// Login & Signup pages.
 app.get('/login', (req, res) => res.render('login'));
 app.get('/signup', (req, res) => res.render('signup'));
+
+// Default pages for employers.
 app.get('/', (req, res) => res.render('index'));
 app.get('/resume', (req, res) => res.render('resume'));
 
-// Start server
+// Start server.
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

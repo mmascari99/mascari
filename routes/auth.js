@@ -6,7 +6,7 @@ const { createUser, getUserByName } = require('../db/db');
 
 const router = express.Router();
 
-// Passport local strategy
+// Passport local strategy.
 passport.use(new LocalStrategy(async (username, password, done) => {
   try {
     const user = await getUserByName(username);
@@ -21,12 +21,12 @@ passport.use(new LocalStrategy(async (username, password, done) => {
   }
 }));
 
-// Serialize user (store in session)
+// Serialize user (store in session).
 passport.serializeUser((user, done) => {
   done(null, user.username);
 });
 
-// Deserialize user (retrieve from session)
+// Deserialize user (retrieve from session).
 passport.deserializeUser(async (username, done) => {
   try {
     const user = await getUserByName(username);
@@ -37,7 +37,7 @@ passport.deserializeUser(async (username, done) => {
   }
 });
 
-// Signup Route
+// Signup Route.
 router.post('/signup', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -51,14 +51,14 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Login Route
+// Login Route.
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/dashboard',
   failureRedirect: '/login',
   failureFlash: true
 }));
 
-// Logout Route
+// Logout Route.
 router.get('/logout', (req, res) => {
   req.logout(() => {
     res.redirect('/');

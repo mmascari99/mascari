@@ -8,14 +8,14 @@ const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CR
   else console.log('Connected to SQLite database');
 });
 
-// Create users table
+// Create users table.
 db.run(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL)`);
 
-// Function to create a new user
+// Function to create a new user.
 async function createUser(username, password) {
   const hashedPassword = await bcrypt.hash(password, 10);
   return new Promise((resolve, reject) => {
@@ -30,7 +30,7 @@ async function createUser(username, password) {
   });
 }
 
-// Function to find a user by username
+// Function to find a user by username.
 function getUserByName(username) {
   return new Promise((resolve, reject) => {
     db.get(`SELECT * FROM users WHERE username = ?`, [username], (err, row) => {
