@@ -32,16 +32,24 @@ app.use(authRoutes);
 // Dashboard route (protected).
 app.get('/dashboard', (req, res) => {
   if (!req.isAuthenticated()) return res.redirect('/login');
-  res.render('dashboard', { name: req.user.username });
+  res.render('dashboard', { name: req.user.username, title: 'Dashboard' });
 });
 
 // Login & Signup pages.
-app.get('/login', (req, res) => res.render('login'));
-app.get('/signup', (req, res) => res.render('signup'));
+app.get('/login', (req, res) => res.render('login', {
+  title: 'Login'
+}));
+app.get('/signup', (req, res) => res.render('signup', {
+  title: 'Signup'
+}));
 
 // Default pages for employers.
-app.get('/', (req, res) => res.render('index'));
-app.get('/resume', (req, res) => res.render('resume'));
+app.get('/', (req, res) => res.render('index', {
+  title: 'Home Page'
+}));
+app.get('/resume', (req, res) => res.render('resume', {
+  title: 'Resume'
+}));
 
 // Start server.
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

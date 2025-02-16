@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-</head>
+<html lang='en'>
+
+<%- include('partials/header') %>
+
 <body>
     <h1>Login</h1>
-    <form action="/login" method="POST">
-        <label for="username">Username</label><br>
-        <input type="text" id="username" name="username" required><br>
+    <form action='/login' method='POST'>
+        <label for='username'>Username</label><br>
+        <input type='text' id='username' name='username' required><br>
         
-        <label for="password">Password</label><br>
-        <input type="password" id="password" name="password" required><br>
+        <label for='password'>Password</label><br>
+        <input type='password' id='password' name='password' required><br>
 
-        <button type="submit">Log In</button>
+        <button type='submit'>Log In</button>
     </form>
     <br>
-    <a href="/signup">Don't have an account? Sign up</a>
+    <a href='/signup'>Don't have an account? Sign up</a>
 </body>
+
+<%- include('partials/footer') %>
+
 </html>
