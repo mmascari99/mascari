@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
-const { createUser, getUserByName } = require('../db/db');
+const { createUser, getUserByName } = require('../db/usersdb');
 
 const router = express.Router();
 

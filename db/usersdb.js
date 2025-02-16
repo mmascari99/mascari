@@ -40,4 +40,4 @@ function getUserByName(username) {
   });
 }
 
-module.exports = { db, createUser, getUserByName };
+module.exports = { createUser, getUserByName };
