@@ -4,10 +4,13 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const path = require('path');
 const authRoutes = require('./routes/auth');
+const exerciseRoutes = require('./routes/addExercise');
 const app = express();
+const { writeStandard, writeWarning, writeError } = require('./scripts/logs')
 require('dotenv').config();
 
 const secretKey = process.env.SECRET_KEY;
+const admin = process.env.ADMIN;
 
 // Middleware.
 app.use(express.urlencoded({ extended: true }));
@@ -28,11 +31,19 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Routes.
 app.use(authRoutes);
+app.use(exerciseRoutes);
 
 // Dashboard route (protected).
 app.get('/dashboard', (req, res) => {
   if (!req.isAuthenticated()) return res.redirect('/login');
   res.render('dashboard', { name: req.user.username, title: 'Dashboard' });
+});
+
+app.get('/admin', (req, res) => {
+  writeStandard('Admin page request by ' + req.user.username.toString());
+  if (!req.isAuthenticated()) return res.redirect('/login');
+  if (req.user.username != admin) return res.redirect('/dashboard');
+  res.render('admin', { title: 'admin'});
 });
 
 // Login & Signup pages.
@@ -52,4 +63,4 @@ app.get('/resume', (req, res) => res.render('resume', {
 }));
 
 // Start server.
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+app.listen(3000, () => console.log('Server running on 3000'));
