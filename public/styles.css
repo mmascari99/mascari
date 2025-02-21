@@ -1,15 +1,61 @@
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: #f4f4f9;
-    text-align: center;
-    padding: 50px;
 }
-
-.container {
+.welcome {
     background-color: white;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.notice-box {
+    width: 90%;
+    background: lightgray;
+    padding: -10px;
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+.container {
+    display: flex;
+    width: 90%;
+    gap: 10px;
+}
+.exercises {
+    flex: 2;
+    border: 2px solid black;
+    padding: 10px;
+}
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.tabs button {
+    flex: 1;
+    padding: 5px;
+    cursor: pointer;
+    border: 1px solid black;
+    background: white;
+}
+.calendar {
+    flex: 2;
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.daily-notes {
+    width: 100%;
+    border-top: 2px solid black;
+    text-align: center;
+    margin-top: 10px;
 }
 
 h1 {
@@ -17,6 +63,6 @@ h1 {
 }
 
 p {
-    color: #333;
-    font-size: 1.2em;
+    color: solid black;
+    font-size: 1.5em;
 }
