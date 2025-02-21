@@ -6,21 +6,25 @@ body {
     flex-direction: column;
     align-items: center;
     background-color: #f4f4f9;
+    justify-content: center;
 }
 .welcome {
+    width: 90%;
     background-color: white;
     border-radius: 10px;
-    padding: 20px;
+    padding-top: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    margin: 10px 0;
 }
-.notice-box {
-    width: 90%;
-    background: lightgray;
-    padding: -10px;
-    text-align: center;
-    font-size: 1.5em;
-    margin-bottom: 10px;
+.thin {
+    width: 20%;
+    padding-bottom: 10px;
+}
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .container {
     display: flex;
@@ -57,11 +61,10 @@ body {
     text-align: center;
     margin-top: 10px;
 }
-
 h1 {
     color: #007BFF;
+    margin: 10px;
 }
-
 p {
     color: solid black;
     font-size: 1.5em;
